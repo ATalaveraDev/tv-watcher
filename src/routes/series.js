@@ -9,4 +9,16 @@ router.post('/', (req, res) => {
   serie.save().then((serieSaved) => res.json(serieSaved));
 });
 
+router.get('/', (req, res) => {
+  Serie.find({}, (err, results) => res.json(results));
+});
+
+router.get('/:id', (req, res) => {
+  Serie.findById(req.params.id, (err, result) => res.json(result));
+});
+
+router.put('/:id', (req, res) => {
+  Serie.updateOne({ _id: req.params.id }, { ...req.body }, (err, result) => res.json(result));
+});
+
 module.exports = router;
