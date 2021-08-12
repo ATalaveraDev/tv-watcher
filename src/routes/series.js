@@ -1,24 +1,17 @@
-const mongoose = require('mongoose');
-const express = require('express');
-var router = express.Router();
+import express from 'express';
 
-const Serie = mongoose.model('Serie', { title: String, seasons: Number, nextEpisode: Number });
+import { Serie } from '../models/serie.js';
 
-router.post('/', (req, res) => {
-  const serie = new Serie({ ...req.body });
-  serie.save().then((serieSaved) => res.json(serieSaved));
-});
+export class SeriesAPI {
+  router = express.Router();
 
-router.get('/', (req, res) => {
-  Serie.find({}, (err, results) => res.json(results));
-});
+  constructor() {
+    const model = new Serie(); 
 
-router.get('/:id', (req, res) => {
-  Serie.findById(req.params.id, (err, result) => res.json(result));
-});
+    this.router.get('/', (req, res) => model.getAll().then((results) => res.json(results)));
+    this.router.post('/', (req, res) => model.create(req.body).then((serie) => res.json(serie)));
 
-router.put('/:id', (req, res) => {
-  Serie.updateOne({ _id: req.params.id }, { ...req.body }, (err, result) => res.json(result));
-});
-
-module.exports = router;
+    this.router.get('/:id', (req, res) => model.getById(req.params.id).then(result => res.json(result)));
+    this.router.put('/:id', (req, res) => model.update(req.params.id, req.body).then(result => res.json(result)));
+  }
+}
