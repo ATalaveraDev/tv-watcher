@@ -8,19 +8,11 @@ export class Serie {
   }
 
   getById(id) {
-    return this.model.findById(id, (err, result) => {
-      if (!err) {
-        return result;
-      }
-    });
+    return this.model.findById(id, (err, result) => !err ? result : err);
   }
 
   getAll() {
-    return this.model.find({}, (err, results) => {
-      if (!err) {
-        return results;
-      }
-    });
+    return this.model.find({}, (err, results) => !err ? results : err);
   }
 
   create(data) {
